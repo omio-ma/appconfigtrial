@@ -24,7 +24,10 @@ namespace appconfigtrial
                         var settings = config.Build();
                         var connection = settings.GetConnectionString("AppConfig");
                         config.AddAzureAppConfiguration(options => 
-                            options.Connect(connection).UseFeatureFlags());
+                            options.Connect(connection).UseFeatureFlags(opt => {
+                                opt.CacheExpirationInterval = TimeSpan.FromSeconds(15);
+                                opt.Label = "Lower Environments";
+                            }));
                     }).UseStartup<Startup>());
     }
 }

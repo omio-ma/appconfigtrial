@@ -24,8 +24,11 @@ namespace appconfigtrial
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            //-- These are required to add the azure app configuration and feature management capabilities
+            services.AddAzureAppConfiguration();
             services.AddFeatureManagement();
-            services.Configure<FeatureTogglesResponse>(Configuration.GetSection("FeatureManagement"));
+
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -53,6 +56,10 @@ namespace appconfigtrial
             {
                 app.UseSpaStaticFiles();
             }
+
+            //-- This is required for the caching feature of the azure app configuration to work.
+            //-- Without this middleware the features will be correct on app load but will not update when the values are changed.
+            app.UseAzureAppConfiguration();
 
             app.UseRouting();
 
