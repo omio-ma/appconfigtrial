@@ -1,5 +1,6 @@
 using System.Linq;
 using appconfigtrial.Controllers;
+using appconfigtrial.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,6 +29,7 @@ namespace appconfigtrial
             //-- These are required to add the azure app configuration and feature management capabilities
             services.AddAzureAppConfiguration();
             services.AddFeatureManagement();
+            services.AddSignalR();
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -68,6 +70,7 @@ namespace appconfigtrial
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+                endpoints.MapHub<FeatureHub>("/featureHub");
             });
 
            //Configuration.GetSection("FeatureManagement").GetChildren().Select((f) => new { f.Key, f.Value} );
